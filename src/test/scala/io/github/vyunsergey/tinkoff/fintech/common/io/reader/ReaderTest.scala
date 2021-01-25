@@ -529,7 +529,7 @@ class ReaderTest extends AnyFunSuite with Matchers {
 
     assertThrows[IllegalArgumentException] {
       Console.withIn(new ByteArrayInputStream(errStr.getBytes)) {
-        Reader.readInput2[Long](" ") shouldBe errStr
+        Reader.readInput2[Double](" ") shouldBe errStr
       }
     }
 
@@ -549,6 +549,156 @@ class ReaderTest extends AnyFunSuite with Matchers {
       val result: Map[Int, (Int, List[Double])] = Reader.readInput2[Double](" ")
       result.get(0) shouldBe Some((3, List(1.1, 2.2, 3.3)))
       result.get(1) shouldBe Some((3, List(1.1, 2.2, 3.3)))
+    }
+  }
+
+  test("Reader readInput2 should parse (Int, Int)") {
+    val errStr: String = "not an integer"
+    val input1: String =
+      """1 1
+        |-100, -100
+        |100, 100
+        |""".stripMargin
+    val input2: String =
+      s"""2 2
+         |${Int.MinValue}, ${Int.MaxValue}
+         |${Int.MaxValue}, ${Int.MinValue}
+         |${Int.MinValue}, ${Int.MaxValue}
+         |${Int.MaxValue}, ${Int.MinValue}
+         |""".stripMargin
+    val input3: String =
+      """3 3
+        |1, 4
+        |2, 5
+        |3, 6
+        |1, 4
+        |2, 5
+        |3, 6
+        |""".stripMargin
+    implicit val parser: Reader.Parser[(Int, Int)] = Reader.tuple2Parser(", ")
+
+    assertThrows[IllegalArgumentException] {
+      Console.withIn(new ByteArrayInputStream(errStr.getBytes)) {
+        Reader.readInput2[(Int, Int)](" ") shouldBe errStr
+      }
+    }
+
+    Console.withIn(new ByteArrayInputStream(input1.getBytes)) {
+      val result: Map[Int, (Int, List[(Int, Int)])] = Reader.readInput2[(Int, Int)](" ")
+      result.get(0) shouldBe Some((1, List((-100, -100))))
+      result.get(1) shouldBe Some((1, List((100, 100))))
+    }
+
+    Console.withIn(new ByteArrayInputStream(input2.getBytes)) {
+      val result: Map[Int, (Int, List[(Int, Int)])] = Reader.readInput2[(Int, Int)](" ")
+      result.get(0) shouldBe Some((2, List((Int.MinValue, Int.MaxValue), (Int.MaxValue, Int.MinValue))))
+      result.get(1) shouldBe Some((2, List((Int.MinValue, Int.MaxValue), (Int.MaxValue, Int.MinValue))))
+    }
+
+    Console.withIn(new ByteArrayInputStream(input3.getBytes)) {
+      val result: Map[Int, (Int, List[(Int, Int)])] = Reader.readInput2[(Int, Int)](" ")
+      result.get(0) shouldBe Some((3, List((1, 4), (2, 5), (3, 6))))
+      result.get(1) shouldBe Some((3, List((1, 4), (2, 5), (3, 6))))
+    }
+  }
+
+  test("Reader readInput2 should parse (Long, Long)") {
+    val errStr: String = "not a long"
+    val input1: String =
+      """1 1
+        |-100, -100
+        |100, 100
+        |""".stripMargin
+    val input2: String =
+      s"""2 2
+         |${Long.MinValue}, ${Long.MaxValue}
+         |${Long.MaxValue}, ${Long.MinValue}
+         |${Long.MinValue}, ${Long.MaxValue}
+         |${Long.MaxValue}, ${Long.MinValue}
+         |""".stripMargin
+    val input3: String =
+      """3 3
+        |1, 4
+        |2, 5
+        |3, 6
+        |1, 4
+        |2, 5
+        |3, 6
+        |""".stripMargin
+    implicit val parser: Reader.Parser[(Long, Long)] = Reader.tuple2Parser(", ")
+
+    assertThrows[IllegalArgumentException] {
+      Console.withIn(new ByteArrayInputStream(errStr.getBytes)) {
+        Reader.readInput2[(Long, Long)](" ") shouldBe errStr
+      }
+    }
+
+    Console.withIn(new ByteArrayInputStream(input1.getBytes)) {
+      val result: Map[Int, (Int, List[(Long, Long)])] = Reader.readInput2[(Long, Long)](" ")
+      result.get(0) shouldBe Some((1, List((-100, -100))))
+      result.get(1) shouldBe Some((1, List((100, 100))))
+    }
+
+    Console.withIn(new ByteArrayInputStream(input2.getBytes)) {
+      val result: Map[Int, (Int, List[(Long, Long)])] = Reader.readInput2[(Long, Long)](" ")
+      result.get(0) shouldBe Some((2, List((Long.MinValue, Long.MaxValue), (Long.MaxValue, Long.MinValue))))
+      result.get(1) shouldBe Some((2, List((Long.MinValue, Long.MaxValue), (Long.MaxValue, Long.MinValue))))
+    }
+
+    Console.withIn(new ByteArrayInputStream(input3.getBytes)) {
+      val result: Map[Int, (Int, List[(Long, Long)])] = Reader.readInput2[(Long, Long)](" ")
+      result.get(0) shouldBe Some((3, List((1, 4), (2, 5), (3, 6))))
+      result.get(1) shouldBe Some((3, List((1, 4), (2, 5), (3, 6))))
+    }
+  }
+
+  test("Reader readInput2 should parse (Double, Double)") {
+    val errStr: String = "not a double"
+    val input1: String =
+      """1 1
+        |-100.123, -100.123
+        |100.123, 100.123
+        |""".stripMargin
+    val input2: String =
+      s"""2 2
+         |${Double.MinValue}, ${Double.MaxValue}
+         |${Double.MaxValue}, ${Double.MinValue}
+         |${Double.MinValue}, ${Double.MaxValue}
+         |${Double.MaxValue}, ${Double.MinValue}
+         |""".stripMargin
+    val input3: String =
+      """3 3
+        |1.1, 4.4
+        |2.2, 5.5
+        |3.3, 6.6
+        |1.1, 4.4
+        |2.2, 5.5
+        |3.3, 6.6
+        |""".stripMargin
+    implicit val parser: Reader.Parser[(Double, Double)] = Reader.tuple2Parser(", ")
+
+    assertThrows[IllegalArgumentException] {
+      Console.withIn(new ByteArrayInputStream(errStr.getBytes)) {
+        Reader.readInput2[(Double, Double)](" ") shouldBe errStr
+      }
+    }
+
+    Console.withIn(new ByteArrayInputStream(input1.getBytes)) {
+      val result: Map[Int, (Int, List[(Double, Double)])] = Reader.readInput2[(Double, Double)](" ")
+      result.get(0) shouldBe Some((1, List((-100.123, -100.123))))
+      result.get(1) shouldBe Some((1, List((100.123, 100.123))))
+    }
+
+    Console.withIn(new ByteArrayInputStream(input2.getBytes)) {
+      val result: Map[Int, (Int, List[(Double, Double)])] = Reader.readInput2[(Double, Double)](" ")
+      result.get(0) shouldBe Some((2, List((Double.MinValue, Double.MaxValue), (Double.MaxValue, Double.MinValue))))
+      result.get(1) shouldBe Some((2, List((Double.MinValue, Double.MaxValue), (Double.MaxValue, Double.MinValue))))
+    }
+
+    Console.withIn(new ByteArrayInputStream(input3.getBytes)) {
+      val result: Map[Int, (Int, List[(Double, Double)])] = Reader.readInput2[(Double, Double)](" ")
+      result.get(0) shouldBe Some((3, List((1.1, 4.4), (2.2, 5.5), (3.3, 6.6))))
+      result.get(1) shouldBe Some((3, List((1.1, 4.4), (2.2, 5.5), (3.3, 6.6))))
     }
   }
 }
