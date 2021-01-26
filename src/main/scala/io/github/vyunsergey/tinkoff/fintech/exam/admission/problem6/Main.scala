@@ -1,7 +1,5 @@
 package io.github.vyunsergey.tinkoff.fintech.exam.admission.problem6
 
-import scala.annotation.tailrec
-
 object Main {
   def main(args: Array[String]): Unit = {
     try {
@@ -23,7 +21,7 @@ object Main {
   }
 
   object ReversedFermat {
-    @tailrec
+    @scala.annotation.tailrec
     def gcd(a: BigInt, b: BigInt): BigInt = {
       if (b == 0) a
       else if (a == 0) b
@@ -68,17 +66,8 @@ object Main {
       }
     }
 
-    @tailrec
-    def powModRec(p: Int, a: BigInt, n: Int, acc: BigInt = 1): BigInt = {
-      val step: Int = 10000
-      if (n == 0) acc % p
-      else if (n < step) {
-        (a.pow(n) % p * acc) % p
-      }
-      else {
-        val tmp: BigInt = a.pow(step) % p
-        powModRec(p, a, n - step, (tmp * acc) % p)
-      }
+    def reverseNumber(p: Int, a: BigInt): Int = {
+      (powMod(p, a % p, p - 2) % p).toInt
     }
 
     def reversedSum(p: Int, a: Int, b: Int): Int = {
@@ -90,15 +79,11 @@ object Main {
       (((numerator / multiplier) % p) * (reverseNumber(p, product / multiplier) % p) % p).toInt
     }
 
-    def reverseNumber(p: Int, a: BigInt): Int = {
-      (powMod(p, a % p, p - 2) % p).toInt
-    }
-
     def reversedNumbers(p: Int): Map[Int, Int] = {
       Array.range(1, p).map(x => (x, reverseNumber(p, x))).toMap
     }
 
-    @tailrec
+    @scala.annotation.tailrec
     def reversedNumbersRec(p: Int, n: Int = 1, numbers: Map[Int, Int] = Map.empty[Int, Int]): Map[Int, Int] = {
       if (numbers.size == p -1) numbers
       else {

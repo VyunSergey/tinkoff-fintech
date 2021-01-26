@@ -51,8 +51,8 @@ class ReversedFermatTest extends AnyFunSuite with Matchers {
   }
 
   test("ReversedFermat method reverseNumber should work") {
-    primes.filter(_ > 16769020).map { p =>
-      Array(10, 100, 500).map { n =>
+    primes.map { p =>
+      Array(10, 50, 100).map { n =>
         Array.range(1, p).take(Array(n, p).min).map { a =>
           val b = ReversedFermat.reverseNumber(p, a)
           println(s"p: $p, a: $a, b: $b")
