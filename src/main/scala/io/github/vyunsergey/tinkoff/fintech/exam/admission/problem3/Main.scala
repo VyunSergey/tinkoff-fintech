@@ -45,12 +45,12 @@ object Main {
       growths.count(x => !x._3 && x._1 % 2 == 1)
     }
 
-    def findStudentEvenGrowthInOddPosition(growths: Array[(Int, Int, Boolean)]): Int = {
-      growths.filter(x => x._3 && x._1 % 2 == 1).map(_._1).head
+    def findStudentEvenGrowthInOddPosition(growths: Array[(Int, Int, Boolean)]): Option[Int] = {
+      growths.filter(x => x._3 && x._1 % 2 == 1).map(_._1).headOption
     }
 
-    def findStudentOddGrowthInEventPosition(growths: Array[(Int, Int, Boolean)]): Int = {
-      growths.filter(x => !x._3 && x._1 % 2 == 0).map(_._1).head
+    def findStudentOddGrowthInEventPosition(growths: Array[(Int, Int, Boolean)]): Option[Int] = {
+      growths.filter(x => !x._3 && x._1 % 2 == 0).map(_._1).headOption
     }
 
     def replaceStudents(students: Array[Int]): (Int, Int) = {
@@ -65,16 +65,19 @@ object Main {
       if (n % 2 == 0) {
         if (evenGrowth == k && oddGrowth == k
           && evenGrowthInEvenPos == k - 1 && oddGrowthInOddPos == k - 1) {
-          (findStudentEvenGrowthInOddPosition(growths), findStudentOddGrowthInEventPosition(growths))
+          (findStudentEvenGrowthInOddPosition(growths).getOrElse(-1),
+            findStudentOddGrowthInEventPosition(growths).getOrElse(-1))
         } else (-1, -1)
       } else {
         if (evenGrowth == k && oddGrowth == k + 1
           && evenGrowthInEvenPos == k - 1 && oddGrowthInOddPos == k) {
-          (findStudentEvenGrowthInOddPosition(growths), findStudentOddGrowthInEventPosition(growths))
+          (findStudentEvenGrowthInOddPosition(growths).getOrElse(-1),
+            findStudentOddGrowthInEventPosition(growths).getOrElse(-1))
         }
         else if (evenGrowth == k + 1 && oddGrowth == k
           && evenGrowthInEvenPos == k && oddGrowthInOddPos == k - 1) {
-          (findStudentEvenGrowthInOddPosition(growths), findStudentOddGrowthInEventPosition(growths))
+          (findStudentEvenGrowthInOddPosition(growths).getOrElse(-1),
+            findStudentOddGrowthInEventPosition(growths).getOrElse(-1))
         }
         else (-1, -1)
       }
